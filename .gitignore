@@ -8,3 +8,4 @@ _ReSharper.*/
 *.dotCover
 build/
 TestResult.xml
+*.user
