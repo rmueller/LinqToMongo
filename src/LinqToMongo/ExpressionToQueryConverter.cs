@@ -17,7 +17,7 @@ namespace LinqToMongo
         {
             var visitor = new Visitor();
             visitor.Visit(expression);
-            return (QueryComplete) visitor.ResultStack.Pop();
+            return (QueryComplete)visitor.ResultStack.Pop();
         }
 
         private class Visitor : ExpressionVisitor
@@ -27,25 +27,32 @@ namespace LinqToMongo
 
             public override Expression Visit(Expression node)
             {
-                Debug.Print("{0}: {1}", node.GetType().ToString(),  node.ToString());
+                Debug.Print("{0}: {1}", node.GetType().ToString(), node.ToString());
                 return base.Visit(node);
             }
 
             protected override Expression VisitBinary(BinaryExpression node)
             {
-                Debug.Print("BINARY {0} --> {1}: {2}", node.NodeType,node.GetType().ToString(), node.ToString());
-                
+                Debug.Print("BINARY {0} --> {1}: {2}", node.NodeType, node.GetType().ToString(), node.ToString());
+
                 Visit(node.Left);
                 var left = resultStackField.Pop();
                 Visit(node.Right);
                 var right = resultStackField.Pop();
-                
-                if (node.NodeType == ExpressionType.Equal)
-                    resultStackField.Push(Query.EQ((string)left, (string)right));
-                else if (node.NodeType == ExpressionType.OrElse)
-                    resultStackField.Push(Query.Or((IMongoQuery) left, (IMongoQuery) right));
-                else
-                    throw new NotSupportedException(string.Format("NodeType '{0}' is not supported!", node.NodeType));
+
+                switch (node.NodeType)
+                {
+                    case ExpressionType.Equal:
+                        resultStackField.Push(Query.EQ((string)left, (string)right));
+                        break;
+                    case ExpressionType.OrElse:
+                        resultStackField.Push(Query.Or((IMongoQuery)left, (IMongoQuery)right));
+                        break;
+                    default:
+                        throw new NotSupportedException(
+                            string.Format("NodeType '{0}' is not supported!", node.NodeType)
+                            );
+                }
 
                 return node;
             }
