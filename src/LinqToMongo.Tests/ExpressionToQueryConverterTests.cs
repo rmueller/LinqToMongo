@@ -33,5 +33,22 @@ namespace LinqToMongo.Tests
                 .ToString()
                 .Should().Be(q.ToString());
         }
+
+        [Test]
+        public void SimpleAND()
+        {
+            var target = ExpressionToQueryConverter.Convert(
+                d => d["age"] > 10 && d["age"] < 20
+                );
+
+            var q = Query.And(
+                Query.GT("age", 10),
+                Query.LT("age", 20)
+                );
+
+            target
+                .ToString()
+                .Should().Be(q.ToString());
+        }
     }
 }

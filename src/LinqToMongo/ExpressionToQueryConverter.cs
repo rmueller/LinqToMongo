@@ -43,11 +43,22 @@ namespace LinqToMongo
                 switch (node.NodeType)
                 {
                     case ExpressionType.Equal:
-                        resultStackField.Push(Query.EQ((string)left, (string)right));
+                        resultStackField.Push(Query.EQ((string)left, BsonValue.Create(right)));
+                        break;
+                    case ExpressionType.GreaterThan:
+                        resultStackField.Push(Query.GT((string) left, BsonValue.Create(right)));
+                        break;
+                    case ExpressionType.LessThan:
+                        resultStackField.Push(Query.LT((string)left, BsonValue.Create(right)));
+                        break;
+                    
+                    case ExpressionType.AndAlso:
+                        resultStackField.Push(Query.And((IMongoQuery) left, (IMongoQuery) right));
                         break;
                     case ExpressionType.OrElse:
                         resultStackField.Push(Query.Or((IMongoQuery)left, (IMongoQuery)right));
                         break;
+
                     default:
                         throw new NotSupportedException(
                             string.Format("NodeType '{0}' is not supported!", node.NodeType)
