@@ -5,13 +5,15 @@ using System.Linq;
 using System.Linq.Expressions;
 
 using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace LinqToMongo
 {
     public class QueryableMongo : IOrderedQueryable<BsonDocument>
     {
-        public QueryableMongo()
+        public QueryableMongo(MongoCollection collection)
         {
+            Collection = collection;
             Provider = new MongoQueryProvider();
             Expression = Expression.Constant(this);
         }
@@ -38,6 +40,7 @@ namespace LinqToMongo
         }
 
         #region IOrderedQueryable<BsonDocument> Members
+        public MongoCollection Collection { get; private set; }
         public IQueryProvider Provider { get; private set; }
         public Expression Expression { get; private set; }
 
@@ -60,5 +63,15 @@ namespace LinqToMongo
         }
 
         #endregion
+
+        public static QueryableMongo Create(MongoCollection collection)
+        {
+            return new QueryableMongo(collection);
+        }
+
+        public IMongoQuery GetQuery()
+        {
+            return ((MongoQueryProvider) Provider).GetMongoWhere(Expression);
+        }
     }
 }
