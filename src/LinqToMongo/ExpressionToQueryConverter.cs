@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 
 using MongoDB.Bson;
+using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 
 namespace LinqToMongo
@@ -35,14 +36,16 @@ namespace LinqToMongo
                 Debug.Print("BINARY {0} --> {1}: {2}", node.NodeType,node.GetType().ToString(), node.ToString());
                 
                 Visit(node.Left);
-                var left = (string) resultStackField.Pop();
+                var left = resultStackField.Pop();
                 Visit(node.Right);
-                var right = (string) resultStackField.Pop();
+                var right = resultStackField.Pop();
                 
-                if (node.NodeType != ExpressionType.Equal)
+                if (node.NodeType == ExpressionType.Equal)
+                    resultStackField.Push(Query.EQ((string)left, (string)right));
+                else if (node.NodeType == ExpressionType.OrElse)
+                    resultStackField.Push(Query.Or((IMongoQuery) left, (IMongoQuery) right));
+                else
                     throw new NotSupportedException(string.Format("NodeType '{0}' is not supported!", node.NodeType));
-
-                resultStackField.Push(Query.EQ(left, right));
 
                 return node;
             }

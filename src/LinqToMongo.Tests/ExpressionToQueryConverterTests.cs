@@ -16,5 +16,22 @@ namespace LinqToMongo.Tests
                 .ToString()
                 .Should().Be(q.ToString());
         }
+
+        [Test]
+        public void SimpleOrExpression()
+        {
+            QueryComplete target = ExpressionToQueryConverter.Convert(
+                d => d["name"] == "John" || d["name"] == "Mary"
+                );
+
+            QueryComplete q = Query.Or(
+                Query.EQ("name", "John"),
+                Query.EQ("name", "Mary")
+                );
+            
+            target
+                .ToString()
+                .Should().Be(q.ToString());
+        }
     }
 }
