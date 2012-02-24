@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using MongoDB.Driver.Builders;
 using NUnit.Framework;
-using MongoDB.Driver.Builders;
 using SharpTestsEx;
 
 namespace LinqToMongo.Tests
@@ -14,8 +10,8 @@ namespace LinqToMongo.Tests
         [Test]
         public void SimpleEQ()
         {
-            var target = ExpressionToQueryConverter.Convert(d => d["name"] == "John");
-            var q = Query.EQ("name", "John");
+            QueryComplete target = ExpressionToQueryConverter.Convert(d => d["name"] == "John");
+            QueryComplete q = Query.EQ("name", "John");
             target
                 .ToString()
                 .Should().Be(q.ToString());
