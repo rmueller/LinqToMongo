@@ -18,7 +18,7 @@ namespace LinqToMongo.Tests
         }
 
         [Test]
-        public void SimpleOrExpression()
+        public void SimpleOR()
         {
             QueryComplete target = ExpressionToQueryConverter.Convert(
                 d => d["name"] == "John" || d["name"] == "Mary"
