@@ -6,3 +6,5 @@ _ReSharper.*/
 .DS_Store
 ._.DS_Store
 *.dotCover
+build/
+TestResult.xml
