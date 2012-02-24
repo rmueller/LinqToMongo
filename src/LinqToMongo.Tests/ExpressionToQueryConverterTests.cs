@@ -50,5 +50,34 @@ namespace LinqToMongo.Tests
                 .ToString()
                 .Should().Be(q.ToString());
         }
+
+        [Test]
+        public void GTE()
+        {
+            var target = ExpressionToQueryConverter.Convert(
+                d => d["age"] >= 10
+                );
+
+            var q = Query.GTE("age", 10);
+
+            target
+                .ToString()
+                .Should().Be(q.ToString());
+        }
+
+        [Test]
+        public void LTE()
+        {
+            var target = ExpressionToQueryConverter.Convert(
+                d => d["age"] <= 10
+                );
+
+            var q = Query.LTE("age", 10);
+
+            target
+                .ToString()
+                .Should().Be(q.ToString());
+        }
+
     }
 }
