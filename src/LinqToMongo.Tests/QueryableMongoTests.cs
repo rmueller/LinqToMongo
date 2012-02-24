@@ -75,7 +75,7 @@ namespace LinqToMongo.Tests
 
         [Test]
         public void AndQueryUsingWhereAsChainedExtensionMethods2()
-        {
+        {   
             var setup = 
                 Queryable.Where(
                     Queryable.Where(

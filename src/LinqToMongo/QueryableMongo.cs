@@ -11,7 +11,7 @@ namespace LinqToMongo
 {
     public class QueryableMongo : IOrderedQueryable<BsonDocument>
     {
-        public QueryableMongo(MongoCollection collection)
+        public QueryableMongo(MongoCollection<BsonDocument> collection)
         {
             Collection = collection;
             Provider = new MongoQueryProvider();
@@ -40,7 +40,7 @@ namespace LinqToMongo
         }
 
         #region IOrderedQueryable<BsonDocument> Members
-        public MongoCollection Collection { get; private set; }
+        public MongoCollection<BsonDocument> Collection { get; private set; }
         public IQueryProvider Provider { get; private set; }
         public Expression Expression { get; private set; }
 
@@ -64,7 +64,7 @@ namespace LinqToMongo
 
         #endregion
 
-        public static QueryableMongo Create(MongoCollection collection)
+        public static QueryableMongo Create(MongoCollection<BsonDocument> collection)
         {
             return new QueryableMongo(collection);
         }

@@ -29,7 +29,9 @@ namespace LinqToMongo
 
         public TResult Execute<TResult>(Expression expression)
         {
-            throw new NotImplementedException();
+            var visitor = new Visitor();
+            visitor.Visit(expression);
+            return (TResult) (object) visitor.Collection.Find(visitor.Where);
         }
 
         #endregion
@@ -46,6 +48,15 @@ namespace LinqToMongo
         private class Visitor : ExpressionVisitor
         {
             public IMongoQuery Where { get; private set; }
+            public MongoCollection<BsonDocument> Collection { get; private set; }
+
+            protected override Expression VisitConstant(ConstantExpression node)
+            {
+                if (node.Value is QueryableMongo)
+                    Collection = (node.Value as QueryableMongo).Collection;
+
+                return base.VisitConstant(node);
+            }
 
             protected override Expression VisitMethodCall(
                 MethodCallExpression node
