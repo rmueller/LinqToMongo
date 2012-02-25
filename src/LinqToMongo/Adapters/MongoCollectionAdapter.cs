@@ -18,12 +18,12 @@ namespace LinqToMongo.Adapters
         }
 
         
-        public MongoCursor<BsonDocument> FindAll()
+        public MongoCursorAdapter FindAll()
         {
             return this.sourceCollectionField.FindAll();
         }
 
-        public MongoCursor<BsonDocument> Find(IMongoQuery query)
+        public MongoCursorAdapter Find(IMongoQuery query)
         {
             return this.sourceCollectionField.Find(query);
         }
