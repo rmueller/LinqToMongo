@@ -2,6 +2,7 @@
 using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Builders;
 
 namespace LinqToMongo.Demo
 {
@@ -17,14 +18,14 @@ namespace LinqToMongo.Demo
 
             collection.Insert(new BsonDocument
                                   {
-                                      {"name", "Jonny"},
-                                      {"age", 32}
+                                      {"name", "Mary"},
+                                      {"age", 35}
                                   });
 
             collection.Insert(new BsonDocument
                                   {
-                                      {"name", "Mary"},
-                                      {"age", 35}
+                                      {"name", "Jonny"},
+                                      {"age", 32}
                                   });
 
             collection.Insert(new BsonDocument
@@ -35,8 +36,13 @@ namespace LinqToMongo.Demo
 
             var q = from d in collection.AsQueryable()
                     where d["age"] > 30
+                    orderby d["age"] ascending 
                     select d;
 
+            var q2 = collection
+                .Find(Query.GT("age", 20))
+                .SetSortOrder("age");
+           
             foreach (var p in q)
                 Console.WriteLine("{0} (Age={1})", p["name"], p["age"]);
 

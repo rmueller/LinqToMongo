@@ -94,5 +94,47 @@ namespace LinqToMongo.Tests
                 .Should().Be(q.ToString());
         }
 
+        [Test]
+        public void BasicOrderByUsingExtensionMethods ()
+        {
+            var setup = QueryableMongo.Create(null)
+                .OrderBy(d => d["name"]);
+
+            var sortBy = ((QueryableMongo) setup).GetSortBy();
+            sortBy.ToString().Should().Be("{ \"name\" : 1 }");
+        }
+
+        [Test]
+        public void BasicOrderByUsingLinqSyntax()
+        {
+            var setup = from d in QueryableMongo.Create(null)
+                        orderby d["name"]
+                        select d;
+
+            var sortBy = ((QueryableMongo)setup).GetSortBy();
+            sortBy.ToString().Should().Be("{ \"name\" : 1 }");
+        }
+
+        [Test]
+        public void BasicOrderByDescendingUsingExtensionMethods()
+        {
+            var setup = QueryableMongo.Create(null)
+                .OrderByDescending(d => d["name"]);
+
+            var sortBy = ((QueryableMongo)setup).GetSortBy();
+            sortBy.ToString().Should().Be("{ \"name\" : -1 }");
+        }
+
+        [Test]
+        public void BasicOrderByDescendingUsingLinqSyntax()
+        {
+            var setup = from d in QueryableMongo.Create(null)
+                        orderby d["name"] descending 
+                        select d;
+
+            var sortBy = ((QueryableMongo)setup).GetSortBy();
+            sortBy.ToString().Should().Be("{ \"name\" : -1 }");
+        }
+
     }
 }
