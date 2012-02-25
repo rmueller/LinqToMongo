@@ -46,7 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\MongoCursorAdapter.cs" />
     <Compile Include="ExpressionToQueryConverter.cs" />
+    <Compile Include="Adapters\MongoCollectionAdapter.cs" />
     <Compile Include="MongoExtensions.cs" />
     <Compile Include="MongoQueryProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

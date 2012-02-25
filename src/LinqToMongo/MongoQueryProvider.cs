@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-
+using LinqToMongo.Adapters;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using MongoDB.Driver.Builders;
@@ -60,7 +60,7 @@ namespace LinqToMongo
         private class Visitor : ExpressionVisitor
         {
             public IMongoQuery Where { get; private set; }
-            public MongoCollection<BsonDocument> Collection { get; private set; }
+            public MongoCollectionAdapter Collection { get; private set; }
             public SortByBuilder SortByBuilder { get; private set;  }
 
             public Visitor()

@@ -7,12 +7,13 @@ using System.Linq.Expressions;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using LinqToMongo.Adapters;
 
 namespace LinqToMongo
 {
     public class QueryableMongo : IOrderedQueryable<BsonDocument>
     {
-        public QueryableMongo(MongoCollection<BsonDocument> collection)
+        public QueryableMongo(MongoCollectionAdapter collection)
         {
             Collection = collection;
             Provider = new MongoQueryProvider();
@@ -40,11 +41,11 @@ namespace LinqToMongo
             Expression = expression;
         }
 
+        public MongoCollectionAdapter Collection { get; private set; }
+        
         #region IOrderedQueryable<BsonDocument> Members
-        public MongoCollection<BsonDocument> Collection { get; private set; }
         public IQueryProvider Provider { get; private set; }
         public Expression Expression { get; private set; }
-
         public Type ElementType
         {
             get { return typeof(BsonDocument); }
