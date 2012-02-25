@@ -105,6 +105,17 @@ namespace LinqToMongo.Tests
         }
 
         [Test]
+        public void BasicThenByUsingExtensionMethods()
+        {
+            var setup = QueryableMongo.Create(null)
+                .OrderBy(d => d["name"])
+                .ThenBy(d => d["age"]);
+
+            var sortBy = ((QueryableMongo)setup).GetSortBy();
+            sortBy.ToString().Should().Be("{ \"name\" : 1, \"age\" : 1 }");
+        }
+
+        [Test]
         public void BasicOrderByUsingLinqSyntax()
         {
             var setup = from d in QueryableMongo.Create(null)
@@ -113,6 +124,28 @@ namespace LinqToMongo.Tests
 
             var sortBy = ((QueryableMongo)setup).GetSortBy();
             sortBy.ToString().Should().Be("{ \"name\" : 1 }");
+        }
+
+        [Test]
+        public void BasicThenByUsingLinqSyntax()
+        {
+            var setup = from d in QueryableMongo.Create(null)
+                        orderby d["name"], d["age"]
+                        select d;
+
+            var sortBy = ((QueryableMongo)setup).GetSortBy();
+            sortBy.ToString().Should().Be("{ \"name\" : 1, \"age\" : 1 }");
+        }
+
+        [Test]
+        public void BasicThenByDescendingUsingLinqSyntax()
+        {
+            var setup = from d in QueryableMongo.Create(null)
+                        orderby d["name"], d["age"] descending 
+                        select d;
+
+            var sortBy = ((QueryableMongo)setup).GetSortBy();
+            sortBy.ToString().Should().Be("{ \"name\" : 1, \"age\" : -1 }");
         }
 
         [Test]

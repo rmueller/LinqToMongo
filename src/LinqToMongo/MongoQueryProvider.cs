@@ -92,7 +92,7 @@ namespace LinqToMongo
                     return node;
                 }
 
-                if (node.Method.Name == "OrderBy")
+                if (node.Method.Name == "OrderBy" || node.Method.Name == "ThenBy")
                 {
                     Visit(node.Arguments[0]);
                     var unary = (UnaryExpression) node.Arguments[1];
@@ -103,7 +103,7 @@ namespace LinqToMongo
                     return node;
                 }
 
-                if (node.Method.Name == "OrderByDescending")
+                if (node.Method.Name == "OrderByDescending" || node.Method.Name == "ThenByDescending")
                 {
                     Visit(node.Arguments[0]);
                     var unary = (UnaryExpression)node.Arguments[1];
