@@ -81,7 +81,8 @@ namespace LinqToMongo
                 MethodCallExpression node
                 )
             {
-                if (node.Method.Name == "Where")
+                var methodName = node.Method.Name;
+                if (methodName == "Where")
                 {
                     Visit(node.Arguments[0]);
                     var filter = ((UnaryExpression) node.Arguments[1]).Operand;
@@ -92,25 +93,19 @@ namespace LinqToMongo
                     return node;
                 }
 
-                if (node.Method.Name == "OrderBy" || node.Method.Name == "ThenBy")
+                if (methodName.StartsWith("OrderBy") || methodName.StartsWith("ThenBy"))
                 {
                     Visit(node.Arguments[0]);
                     var unary = (UnaryExpression) node.Arguments[1];
                     var o = (Expression<Func<BsonDocument, BsonValue>>) unary.Operand;
                     var m = (MethodCallExpression) o.Body;
                     var c = (ConstantExpression) m.Arguments[0];
-                    this.SortByBuilder.Ascending(c.Value.ToString());
-                    return node;
-                }
 
-                if (node.Method.Name == "OrderByDescending" || node.Method.Name == "ThenByDescending")
-                {
-                    Visit(node.Arguments[0]);
-                    var unary = (UnaryExpression)node.Arguments[1];
-                    var o = (Expression<Func<BsonDocument, BsonValue>>)unary.Operand;
-                    var m = (MethodCallExpression)o.Body;
-                    var c = (ConstantExpression)m.Arguments[0];
-                    this.SortByBuilder.Descending(c.Value.ToString());
+                    if (methodName.EndsWith("Descending"))
+                        SortByBuilder.Descending(c.Value.ToString());
+                    else
+                        SortByBuilder.Ascending(c.Value.ToString());
+                    
                     return node;
                 }
 
