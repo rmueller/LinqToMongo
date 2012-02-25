@@ -36,7 +36,7 @@ namespace LinqToMongo.Demo
 
             var q = from d in collection.AsQueryable()
                     where d["age"] > 30
-                    orderby d["age"] ascending 
+                    orderby d["age"]
                     select d;
 
             var q2 = collection

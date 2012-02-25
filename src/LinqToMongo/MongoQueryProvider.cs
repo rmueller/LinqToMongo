@@ -34,7 +34,7 @@ namespace LinqToMongo
             visitor.Visit(expression);
 
             var presult = visitor.Where == null ? visitor.Collection.FindAll() : visitor.Collection.Find(visitor.Where);
-            var sortBy = SortBy.Ascending("age");
+            var sortBy = visitor.SortByBuilder;
             
             return (TResult) (object) presult.SetSortOrder(sortBy);
         }
