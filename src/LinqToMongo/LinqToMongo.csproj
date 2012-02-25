@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExpressionToQueryConverter.cs" />
+    <Compile Include="MongoExtensions.cs" />
     <Compile Include="MongoQueryProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryableMongo.cs" />
